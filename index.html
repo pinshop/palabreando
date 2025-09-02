@@ -1,472 +1,306 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Carrera de Países - TikTok LIVE</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Librerías -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-<script src="connection.js"></script>
-
-<style>
-body {
-    font-family: sans-serif;
-    background: #8A2BE2;
-    color: white;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
-#particles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-}
-.inputFields {
-    padding: 10px;
-    background: rgba(17, 17, 17, 0.9);
-    border-bottom: 1px solid #333;
-}
-.inputFields input[type="text"], .inputFields input[type="button"] {
-    padding: 5px 10px;
-    font-size: 1em;
-}
-#stateText { margin: 10px; }
-.banderas {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-.bandera {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.bandera img {
-    border: 3px solid black;
-    border-radius: 6px;
-    width: 70px;
-    height: 50px;
-}
-.contador {
-    font-size: 64px;
-    color: yellow;
-    margin-top: 5px;
-}
-.win-buttons {
-    margin-top: 5px;
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-}
-.win-buttons button {
-    padding: 4px 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: yellow;
-    color: black;
-    font-weight: bold;
-}
-.win-buttons button:hover {
-    background-color: gold;
-}
-
-.track {
-    position: relative;
-    margin: 1px auto;
-    width: 90%;
-    height: 70px;
-    background-color: purple;
-    border-radius: 10px;
-    overflow: hidden;
-}
-.track::before {
-    content: "";
-    position: absolute;
-    top: 90%;
-    left: 0;
-    width: 200%;
-    height: 4px;
-    background-image: repeating-linear-gradient(
-        to right,
-        white 0px,
-        white 20px,
-        transparent 20px,
-        transparent 40px
-    );
-    animation: moveLines 0.5s linear infinite;
-    transform: translateY(-50%);
-    z-index: 0;
-}
-@keyframes moveLines {
-    from { transform: translate(0, -50%); }
-    to { transform: translate(-40px, -50%); }
-}
-.runner {
-    position: absolute;
-    top: 5px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: left 0.15s ease-out;
-    z-index: 5;
-}
-.runner .flag-img {
-    border: 3px solid black;
-    border-radius: 6px;
-    width: 60px;
-    height: 50px;
-    object-fit: cover;
-}
-.runner .stickman-gif {
-    width: 50px;
-    height: 60px;
-    object-fit: contain;
-}
-.username-label {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 27px;
-    color: whitesmoke;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    left: -250px;
-    transition: left 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-.username-label img {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid white;
-}
-.username-label .gif-icon {
-    height: 45px;
-    margin-left: 6px;
-}
-.meta {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 30px;
-    height: 100%;
-    background: repeating-linear-gradient(
-        to bottom,
-        #ccc,
-        #ccc 10px,
-        #000 10px,
-        #000 20px
-    );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    writing-mode: vertical-rl;
-    color: yellow;
-    font-weight: bold;
-    z-index: 6;
-}
-#winner-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease-in-out;
-}
-#winner-overlay.show {
-    opacity: 1;
-    pointer-events: all;
-}
-#winner-flag {
-    max-width: 60%;
-    max-height: 60%;
-    border-radius: 20px;
-    box-shadow: 0 0 40px rgba(255,255,255,0.9);
-    transform: scale(1);
-    transition: transform 0.5s ease-in-out;
-}
-#winner-overlay.show #winner-flag {
-    transform: scale(1.8);
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Carrera de Países</title>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+        }
+        
+        #login-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .login-container {
+            background: rgba(17, 17, 34, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(0deg);
+            z-index: -1;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo p {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 2px rgba(100, 149, 237, 0.6);
+        }
+        
+        .input-group input:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(218, 27, 96, 0.4);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(218, 27, 96, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .error-message {
+            color: #ff4757;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            min-height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .error-message.show {
+            opacity: 1;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 500px) {
+            .login-container {
+                padding: 30px 20px;
+                width: 95%;
+            }
+            
+            .logo h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<div id="particles"></div>
-
-<div class="inputFields">
-    <p>Bienvenido Palabreando, dale conectar</p>
-    <input type="button" id="connectButton" value="Conectar">
-    <div id="stateText"></div>
-</div>
-
-<div class="banderas" id="panelBanderas"></div>
-<div id="pistas"></div>
-
-<!-- Overlay para celebración -->
-<div id="winner-overlay">
-    <img id="winner-flag" src="" alt="Winner Flag">
-</div>
-
-<script>
-const flags = {
-    venezuela: 'https://flagcdn.com/w80/ve.png',
-    mexico: 'https://flagcdn.com/w80/mx.png',
-    chile: 'https://flagcdn.com/w80/cl.png',
-    colombia: 'https://flagcdn.com/w80/co.png',
-    ecuador: 'https://flagcdn.com/w80/ec.png',
-    guatemala: 'https://flagcdn.com/w80/gt.png',
-    el_salvador: 'https://flagcdn.com/w80/sv.png',
-    dominicana: 'https://flagcdn.com/w80/do.png',
-    peru: 'https://flagcdn.com/w80/pe.png',
-    costa_rica: 'https://flagcdn.com/w80/cr.png',
-    paraguay: 'https://flagcdn.com/w80/py.png'
-};
-
-// Stickman personalizado
-const stickmanGifs = {
-    venezuela: 'stickman_ve.gif',
-    mexico: 'stickman_mx.gif',
-    chile: 'stickman_cl.gif',
-    colombia: 'stickman_co.gif',
-    ecuador: 'stickman_ec.gif',
-    guatemala: 'stickman_gt.gif',
-    el_salvador: 'stickman_sv.gif',
-    dominicana: 'stickman_do.gif',
-    peru: 'stickman_pe.gif',
-    costa_rica: 'stickman_cr.gif',
-    paraguay: 'stickman_py.gif'
-};
-
-const positions = {};
-const victorias = {};
-const paises = Object.keys(flags);
-
-const panel = document.getElementById("panelBanderas");
-const pistas = document.getElementById("pistas");
-let enCelebracion = false;
-
-// === 🔊 Sonidos ===
-const sonidoKamehame = new Audio("kamehame.mp3");
-const sonidoWin = new Audio("win.mp3");
-const sonidoResta = new Audio("lose.mp3");
-
-paises.forEach(p => {
-    positions[p] = 0;
-    victorias[p] = 0;
-    const div = document.createElement("div");
-    div.className = "bandera";
-    div.innerHTML = `
-        <img src="${flags[p]}">
-        <div class="contador" id="v_${p}">0</div>
-        <div class="win-buttons">
-            <button class="btn-add" data-country="${p}">+</button>
-            <button class="btn-sub" data-country="${p}">−</button>
-        </div>`;
-    panel.appendChild(div);
-    const track = document.createElement("div");
-    track.className = "track";
-    track.setAttribute("data-country", p);
-    track.innerHTML = `
-        <div class="username-label" id="u_${p}"></div>
-        <div class="runner" id="${p}" style="left:0%;">
-            <img class="flag-img" src="${flags[p]}">
-            <img class="stickman-gif" src="${stickmanGifs[p]}" alt="Corredor">
+    <div id="login-particles"></div>
+    
+    <div class="login-container">
+        <div class="logo">
+            <h1>Carrera de Países</h1>
+            <p>Inicia sesión para comenzar la transmisión</p>
         </div>
-        <div class="meta">META</div>`;
-    pistas.appendChild(track);
-});
+        
+        <div class="input-group">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" placeholder="Ingresa tu usuario" autocomplete="off">
+        </div>
+        
+        <div class="input-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" placeholder="Ingresa tu contraseña">
+        </div>
+        
+        <button class="btn" id="login-btn">Iniciar Sesión</button>
+        
+        <div class="error-message" id="error-message"></div>
+        
+        <div class="footer">
+            <p>Sistema de transmisión TikTok LIVE</p>
+        </div>
+    </div>
 
-function showUsername(pais, username, profilePic, callback) {
-    const label = document.getElementById("u_" + pais);
-    label.innerHTML = `<img src="${profilePic}"><span>${username}</span>`;
-    label.style.opacity = "1";
-    label.style.left = "-250px";
-    requestAnimationFrame(() => {
-        const runner = document.getElementById(pais);
-        const runnerLeft = runner.offsetLeft;
-        const targetLeft = runnerLeft - label.offsetWidth - 10;
-        label.style.left = targetLeft + "px";
-    });
-    setTimeout(() => { if (callback) callback(); }, 1000);
-}
-
-function showKamehame(pais) {
-    sonidoKamehame.currentTime = 0;
-    sonidoKamehame.play();
-    const label = document.getElementById("u_" + pais);
-    label.innerHTML += `<img class="gif-icon" src="kamehame.gif">`;
-    setTimeout(() => {
-        const gifs = label.querySelectorAll(".gif-icon");
-        gifs.forEach(img => img.remove());
-    }, 4000);
-}
-
-function showWinner(pais) {
-    sonidoWin.currentTime = 0;
-    sonidoWin.play();
-    enCelebracion = true;
-    const overlay = document.getElementById("winner-overlay");
-    const flagImg = document.getElementById("winner-flag");
-    flagImg.src = flags[pais];
-    overlay.classList.add("show");
-    positions[pais] = 0;
-    const corredor = document.getElementById(pais);
-    corredor.style.transition = "none";
-    corredor.style.left = "0%";
-    setTimeout(() => { corredor.style.transition = ""; }, 50);
-    setTimeout(() => {
-        overlay.classList.remove("show");
-        enCelebracion = false;
-    }, 3000);
-}
-
-function advance(pais, username, profilePic) {
-    showUsername(pais, username, profilePic, () => {
-        positions[pais] += 5;
-        if (positions[pais] >= 90) {
-            positions[pais] = 90;
-            victorias[pais]++;
-            document.getElementById("v_" + pais).innerText = victorias[pais];
-            showWinner(pais);
-        }
-        document.getElementById(pais).style.left = positions[pais] + "%";
-        setTimeout(() => showKamehame(pais), 200);
-    });
-}
-
-// Tecla de prueba
-document.addEventListener("keydown", e => {
-    if (e.key === "1") {
-        advance("venezuela", "Test User", "https://via.placeholder.com/52");
-    }
-});
-
-// TikTok LIVE
-let backendUrl = location.protocol === 'file:' ? "https://tiktok-chat-reader.zerody.one/" : undefined;
-let connection = new TikTokIOConnection(backendUrl);
-
-$("#connectButton").click(connect);
-
-function connect() {
-    let username = "palabreando"; // Usuario por defecto
-    $("#stateText").text("Conectando...");
-    connection.connect(username).then(state => {
-        $("#stateText").text(`Conectado a roomId ${state.roomId}`);
-    }).catch(err => $("#stateText").text("Error: " + err));
-}
-
-// IDs de gifts
-const ROSA_ID = 5655;   // Venezuela
-const MEX_ID  = 5269;   // México
-const CHILE_ID = 6064;  // Chile
-const COL_ID = 13651;   // Colombia
-const ECU_ID = 15104;   // Ecuador
-const GUA_ID = 7032;   // Guatemala
-const ELSALVADOR_ID = 8239;   // El Salvador
-const DOM_ID = 5827;   // República Dominicana
-const PERU_ID = 15232;   // Perú (reemplazando a Argentina)
-const CRI_ID = 7096;   // Costa Rica
-const PAR_ID = 15231;   // Paraguay
-const lastGiftCount = {};
-
-connection.on("gift", data => {
-    switch (data.giftId) {
-        case ROSA_ID:
-            advance("venezuela", data.nickname, data.profilePictureUrl);
-            break;
-        case MEX_ID:
-            advance("mexico", data.nickname, data.profilePictureUrl);
-            break;
-        case CHILE_ID:
-            advance("chile", data.nickname, data.profilePictureUrl);
-            break;
-        case COL_ID:
-            advance("colombia", data.nickname, data.profilePictureUrl);
-            break;
-        case ECU_ID:
-            advance("ecuador", data.nickname, data.profilePictureUrl);
-            break;
-        case GUA_ID:
-            advance("guatemala", data.nickname, data.profilePictureUrl);
-            break;
-        case ELSALVADOR_ID:
-            advance("el_salvador", data.nickname, data.profilePictureUrl);
-            break;
-        case DOM_ID:
-            advance("dominicana", data.nickname, data.profilePictureUrl);
-            break;
-        case PERU_ID:
-            advance("peru", data.nickname, data.profilePictureUrl);
-            break;
-        case CRI_ID:
-            advance("costa_rica", data.nickname, data.profilePictureUrl);
-            break;
-        case PAR_ID:
-            advance("paraguay", data.nickname, data.profilePictureUrl);
-            break;
-    }
-});
-
-// Botones manuales
-$(document).on("click", ".btn-add", function() {
-    const pais = $(this).data("country");
-    victorias[pais]++;
-    document.getElementById("v_" + pais).innerText = victorias[pais];
-    sonidoWin.currentTime = 0;
-    sonidoWin.play();
-});
-$(document).on("click", ".btn-sub", function() {
-    const pais = $(this).data("country");
-    victorias[pais]--;
-    document.getElementById("v_" + pais).innerText = victorias[pais];
-    sonidoResta.currentTime = 0;
-    sonidoResta.play();
-});
-
-// partículas
-tsParticles.load("particles", {
-    background: { color: "#8A2BE2" },
-    particles: { number: { value: 800, density: { enable: true, area: 800 } }, color: { value: "#ffffff" }, shape: { type: "circle" }, opacity: { value: 0.3 }, size: { value: 2 }, move: { enable: true, speed: 1, outModes: "out" } },
-    interactivity: { events: { onHover: { enable: false } } },
-    detectRetina: true
-});
-
-// colores pista
-const coloresPista = ["#1E90FF","#FF69B4","#FF4500","#32CD32","#8A2BE2","#1E90FF"];
-let indiceColor = 0;
-function cambiarColorPista() {
-    document.querySelectorAll(".track").forEach(track => {
-        track.style.backgroundColor = coloresPista[indiceColor];
-    });
-    indiceColor = (indiceColor + 1) % coloresPista.length;
-}
-cambiarColorPista();
-setInterval(cambiarColorPista, 600000);
-</script>
+    <script>
+        // Configuración de partículas
+        document.addEventListener('DOMContentLoaded', function() {
+            tsParticles.load("login-particles", {
+                particles: {
+                    number: {
+                        value: 80,
+                        density: {
+                            enable: true,
+                            area: 800
+                        }
+                    },
+                    color: {
+                        value: "#ffffff"
+                    },
+                    shape: {
+                        type: "circle"
+                    },
+                    opacity: {
+                        value: 0.5,
+                        random: true
+                    },
+                    size: {
+                        value: 3,
+                        random: true
+                    },
+                    move: {
+                        enable: true,
+                        speed: 1,
+                        direction: "none",
+                        random: true,
+                        outModes: "out"
+                    },
+                    lineLinked: {
+                        enable: false
+                    }
+                },
+                interactivity: {
+                    detectsOn: "canvas",
+                    events: {
+                        onHover: {
+                            enable: true,
+                            mode: "bubble"
+                        },
+                        onClick: {
+                            enable: true,
+                            mode: "push"
+                        },
+                        resize: true
+                    },
+                    modes: {
+                        bubble: {
+                            distance: 100,
+                            size: 5,
+                            duration: 0.3,
+                            opacity: 1
+                        },
+                        push: {
+                            quantity: 4
+                        }
+                    }
+                },
+                retina_detect: true
+            });
+        });
+        
+        // Validación de login
+        document.getElementById('login-btn').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            if (username === 'palabreando' && password === 'pinshopcol1') {
+                errorMessage.textContent = '';
+                errorMessage.classList.remove('show');
+                
+                // Efecto de éxito
+                this.textContent = '¡Éxito!';
+                this.style.background = 'linear-gradient(to right, #00b09b, #96c93d)';
+                
+                // Redirección después de un breve delay
+                setTimeout(function() {
+                    window.location.href = 'carrera-paises.html'; // Cambia por la URL de tu página principal
+                }, 1500);
+            } else {
+                errorMessage.textContent = 'Usuario o contraseña incorrectos';
+                errorMessage.classList.add('show');
+                
+                // Efecto de error
+                this.textContent = 'Error - Intenta de nuevo';
+                this.style.background = 'linear-gradient(to right, #ff416c, #ff4b2b)';
+                
+                setTimeout(() => {
+                    this.textContent = 'Iniciar Sesión';
+                    this.style.background = 'linear-gradient(to right, #ff8a00, #da1b60)';
+                }, 2000);
+            }
+        });
+        
+        // Permitir login con la tecla Enter
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('login-btn').click();
+            }
+        });
+    </script>
 </body>
 </html>
