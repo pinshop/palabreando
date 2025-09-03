@@ -9,7 +9,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/pinshop/connection/connection.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/pinshop/connection@main/connection.js"></script>
+
 
 
 <style>
@@ -374,7 +375,7 @@ let connection = new TikTokIOConnection(backendUrl);
 $("#connectButton").click(connect);
 
 function connect() {
-    let username = "tmachh"; // Usuario por defecto
+    let username = "palabreando"; // Usuario por defecto
     $("#stateText").text("Conectando...");
     connection.connect(username).then(state => {
         $("#stateText").text(`Conectado a roomId ${state.roomId}`);
