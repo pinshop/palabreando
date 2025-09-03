@@ -374,7 +374,7 @@ let connection = new TikTokIOConnection(backendUrl);
 $("#connectButton").click(connect);
 
 function connect() {
-    let username = "palabreando"; // Usuario por defecto
+    let username = "tmachh"; // Usuario por defecto
     $("#stateText").text("Conectando...");
     connection.connect(username).then(state => {
         $("#stateText").text(`Conectado a roomId ${state.roomId}`);
