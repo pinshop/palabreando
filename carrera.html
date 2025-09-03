@@ -369,8 +369,9 @@ document.addEventListener("keydown", e => {
 });
 
 // TikTok LIVE
-let backendUrl = location.protocol === 'file:' ? "https://tiktok-chat-reader.zerody.one/";
+let backendUrl = "https://tiktok-chat-reader.zerody.one/";
 let connection = new TikTokIOConnection(backendUrl);
+
 
 $("#connectButton").click(connect);
 
